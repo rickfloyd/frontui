@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QubitSensei - AI Trading Mentor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .header {
+      background: rgba(255, 0, 255, 0.1);
+      border-bottom: 2px solid #ff00ff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(255, 0, 255, 0.3);
+    }
+
+    .header h1 {
+      color: #ff00ff;
+      font-size: 2.5em;
+      text-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #ff4fd8;
+      font-size: 1.2em;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+      height: calc(100vh - 120px);
+    }
+
+    .chat-container {
+      background: rgba(26, 10, 46, 0.8);
+      border: 2px solid #ff00ff;
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 32px rgba(255, 0, 255, 0.3);
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      background: rgba(255, 0, 255, 0.2);
+      border-left: 4px solid #ff00ff;
+      margin-left: 20px;
+    }
+
+    .message.assistant {
+      background: rgba(0, 255, 255, 0.2);
+      border-left: 4px solid #00ffff;
+      margin-right: 20px;
+    }
+
+    .message-header {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #ff00ff;
+    }
+
+    .message.assistant .message-header {
+      color: #00ffff;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid #ff00ff;
+      border-radius: 10px;
+      color: white;
+      font-size: 1em;
+    }
+
+    .input-area input:focus {
+      outline: none;
+      border-color: #ff4fd8;
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+    }
+
+    .btn {
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #ff00ff, #ff4fd8);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .sidebar {
+      background: rgba(26, 10, 46, 0.8);
+      border: 2px solid #ff00ff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(255, 0, 255, 0.3);
+    }
+
+    .sidebar h2 {
+      color: #ff00ff;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .quick-btn {
+      padding: 12px;
+      background: rgba(255, 0, 255, 0.2);
+      border: 1px solid #ff00ff;
+      border-radius: 8px;
+      color: #ff4fd8;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      font-size: 0.9em;
+    }
+
+    .quick-btn:hover {
+      background: rgba(255, 0, 255, 0.4);
+      transform: translateX(5px);
+    }
+
+    .features {
+      margin-top: 20px;
+    }
+
+    .feature-item {
+      padding: 10px;
+      margin-bottom: 10px;
+      background: rgba(0, 255, 255, 0.1);
+      border-left: 3px solid #00ffff;
+      border-radius: 5px;
+    }
+
+    .feature-item h3 {
+      color: #00ffff;
+      font-size: 1em;
+      margin-bottom: 5px;
+    }
+
+    .feature-item p {
+      color: #aaa;
+      font-size: 0.85em;
+    }
+
+    .status {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: rgba(0, 255, 0, 0.2);
+      border: 2px solid #00ff00;
+      border-radius: 20px;
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: #ff00ff;
+      margin: 10px 0;
+    }
+
+    .loading.active {
+      display: block;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ff00ff, #ff4fd8);
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="status">● Backend Online</div>
+
+  <div class="header">
+    <h1>QubitSensei 🧠</h1>
+    <p>Your AI-Powered Trading Mentor - Powered by GPT-4</p>
+  </div>
+
+  <div class="container">
+    <div class="chat-container">
+      <div class="messages" id="messages">
+        <div class="message assistant">
+          <div class="message-header">QubitSensei</div>
+          <div>
+            Welcome! I'm QubitSensei, your AI trading mentor powered by GPT-4. I can help you with:
+            <br><br>
+            • Trading strategy guidance<br>
+            • Code optimization and review<br>
+            • QubitScript education<br>
+            • Pine Script to QubitScript conversion<br>
+            • Real-time debugging assistance<br>
+            <br>
+            Ask me anything about trading strategies or coding!
+          </div>
+        </div>
+      </div>
+
+      <div class="loading" id="loading">
+        ⚡ QubitSensei is thinking...
+      </div>
+
+      <div class="input-area">
+        <input 
+          type="text" 
+          id="userInput" 
+          placeholder="Ask QubitSensei anything about trading..."
+          onkeypress="if(event.key==='Enter') sendMessage()"
+        >
+        <button class="btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <h2>Quick Actions</h2>
+      <div class="quick-actions">
+        <button class="quick-btn" onclick="quickAsk('Explain EMA crossovers')">
+          📊 Explain EMA Crossovers
+        </button>
+        <button class="quick-btn" onclick="quickAsk('What is RSI and how to use it?')">
+          📈 Understanding RSI
+        </button>
+        <button class="quick-btn" onclick="quickAsk('Create a momentum strategy')">
+          🚀 Momentum Strategy
+        </button>
+        <button class="quick-btn" onclick="quickAsk('How to optimize my trading code?')">
+          ⚡ Code Optimization
+        </button>
+        <button class="quick-btn" onclick="quickAsk('Explain risk management')">
+          🛡️ Risk Management
+        </button>
+        <button class="quick-btn" onclick="quickAsk('Convert Pine Script to QubitScript')">
+          🔄 Pine → Qubit
+        </button>
+      </div>
+
+      <div class="features">
+        <h2 style="margin-bottom: 15px;">Features</h2>
+        
+        <div class="feature-item">
+          <h3>🤖 GPT-4 Powered</h3>
+          <p>Advanced AI with deep trading knowledge</p>
+        </div>
+
+        <div class="feature-item">
+          <h3>📚 Context Aware</h3>
+          <p>Remembers conversation history</p>
+        </div>
+
+        <div class="feature-item">
+          <h3>🔒 Secure</h3>
+          <p>QuantumGuardian protection</p>
+        </div>
+
+        <div class="feature-item">
+          <h3>⚡ Real-time</h3>
+          <p>Instant responses and guidance</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let userId = 'investor-demo-' + Date.now();
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const message = input.value.trim();
+      
+      if (!message) return;
+
+      // Add user message
+      addMessage('user', message);
+      input.value = '';
+
+      // Show loading
+      document.getElementById('loading').classList.add('active');
+
+      try {
+        const response = await fetch('http://localhost:5000/api/sensei', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: userId,
+            prompt: message,
+            context: { expertiseLevel: 'intermediate' }
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          addMessage('assistant', data.message);
+        } else {
+          addMessage('assistant', '❌ Error: ' + (data.error || 'Failed to get response'));
+        }
+      } catch (error) {
+        addMessage('assistant', '❌ Connection error. Make sure backend is running on port 5000.');
+        console.error('Error:', error);
+      } finally {
+        document.getElementById('loading').classList.remove('active');
+      }
+    }
+
+    function quickAsk(question) {
+      document.getElementById('userInput').value = question;
+      sendMessage();
+    }
+
+    function addMessage(type, content) {
+      const messagesDiv = document.getElementById('messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${type}`;
+      
+      const header = document.createElement('div');
+      header.className = 'message-header';
+      header.textContent = type === 'user' ? 'You' : 'QubitSensei';
+      
+      const body = document.createElement('div');
+      body.textContent = content;
+      
+      messageDiv.appendChild(header);
+      messageDiv.appendChild(body);
+      messagesDiv.appendChild(messageDiv);
+      
+      // Scroll to bottom
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Check backend status
+    async function checkBackendStatus() {
+      try {
+        const response = await fetch('http://localhost:5000/api/health');
+        const data = await response.json();
+        
+        if (data.status === 'ok') {
+          document.querySelector('.status').innerHTML = '● Backend Online';
+          document.querySelector('.status').style.borderColor = '#00ff00';
+          document.querySelector('.status').style.background = 'rgba(0, 255, 0, 0.2)';
+        }
+      } catch (error) {
+        document.querySelector('.status').innerHTML = '● Backend Offline';
+        document.querySelector('.status').style.borderColor = '#ff0000';
+        document.querySelector('.status').style.background = 'rgba(255, 0, 0, 0.2)';
+      }
+    }
+
+    // Check status on load and every 10 seconds
+    checkBackendStatus();
+    setInterval(checkBackendStatus, 10000);
+  </script>
+</body>
+</html>

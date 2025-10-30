@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sports - AI Quantum Trading Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #000000 0%, #001a33 100%);
+      color: #00ffff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      overflow-x: hidden;
+      min-width: 1280px;
+    }
+
+    .container {
+      max-width: 1920px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 0;
+      border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+      margin-bottom: 2rem;
+    }
+
+    .back-btn {
+      background: rgba(0, 255, 255, 0.2);
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      padding: 0.8rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(0, 255, 255, 0.4);
+      transform: translateX(-5px);
+    }
+
+    h1 {
+      font-size: 3rem;
+      background: linear-gradient(90deg, #00ffff, #0080ff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sports-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .sport-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(0, 255, 255, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .sport-card:hover {
+      transform: translateY(-5px);
+      border-color: #00ffff;
+      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+    }
+
+    .sport-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .sport-name {
+      font-size: 1.8rem;
+      color: #00ffff;
+      margin-bottom: 1rem;
+    }
+
+    .sport-stats {
+      color: #888;
+      margin-bottom: 1rem;
+    }
+
+    .live-indicator {
+      background: rgba(255, 0, 0, 0.2);
+      border: 1px solid #f00;
+      color: #f00;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      display: inline-block;
+      font-size: 0.9rem;
+    }
+
+    .live-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #f00;
+      border-radius: 50%;
+      animation: blink 1s infinite;
+      margin-right: 5px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .status-bar {
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid #0ff;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #0ff;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="index.html" class="back-btn">← Back to Home</a>
+      <h1>⚽ SPORTS</h1>
+      <div style="width: 150px;"></div>
+    </header>
+
+    <div class="status-bar">
+      <span class="status-indicator"></span>
+      <strong>LIVE SPORTS DATA</strong> • Global Coverage • Desktop Mode
+    </div>
+
+    <div class="sports-grid">
+      <div class="sport-card">
+        <div class="sport-icon">⚽</div>
+        <div class="sport-name">Soccer</div>
+        <div class="sport-stats">245 Live Matches</div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>LIVE
+        </div>
+      </div>
+
+      <div class="sport-card">
+        <div class="sport-icon">🏀</div>
+        <div class="sport-name">Basketball</div>
+        <div class="sport-stats">89 Live Games</div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>LIVE
+        </div>
+      </div>
+
+      <div class="sport-card">
+        <div class="sport-icon">🏈</div>
+        <div class="sport-name">Football</div>
+        <div class="sport-stats">34 Live Games</div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>LIVE
+        </div>
+      </div>
+
+      <div class="sport-card">
+        <div class="sport-icon">⚾</div>
+        <div class="sport-name">Baseball</div>
+        <div class="sport-stats">156 Live Games</div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>LIVE
+        </div>
+      </div>
+
+      <div class="sport-card">
+        <div class="sport-icon">🎾</div>
+        <div class="sport-name">Tennis</div>
+        <div class="sport-stats">67 Live Matches</div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>LIVE
+        </div>
+      </div>
+
+      <div class="sport-card">
+        <div class="sport-icon">🏒</div>
+        <div class="sport-name">Hockey</div>
+        <div class="sport-stats">23 Live Games</div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>LIVE
+        </div>
+      </div>
+
+      <div class="sport-card">
+        <div class="sport-icon">🏐</div>
+        <div class="sport-name">Volleyball</div>
+        <div class="sport-stats">45 Live Matches</div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>LIVE
+        </div>
+      </div>
+
+      <div class="sport-card">
+        <div class="sport-icon">🥊</div>
+        <div class="sport-name">Boxing/MMA</div>
+        <div class="sport-stats">12 Live Events</div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>LIVE
+        </div>
+      </div>
+
+      <div class="sport-card">
+        <div class="sport-icon">🏏</div>
+        <div class="sport-name">Cricket</div>
+        <div class="sport-stats">89 Live Matches</div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>LIVE
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    console.log("⚽ Sports page loaded - Desktop mode");
+    
+    // Simulate live match count updates
+    setInterval(() => {
+      const stats = document.querySelectorAll('.sport-stats');
+      stats.forEach(stat => {
+        const match = stat.textContent.match(/(\d+)/);
+        if (match) {
+          const count = parseInt(match[1]);
+          const change = Math.floor(Math.random() * 5) - 2;
+          const newCount = Math.max(0, count + change);
+          stat.textContent = `${newCount} Live ${stat.textContent.includes('Matches') ? 'Matches' : stat.textContent.includes('Events') ? 'Events' : 'Games'}`;
+        }
+      });
+    }, 8000);
+  </script>
+</body>
+</html>

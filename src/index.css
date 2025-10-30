@@ -18,3 +18,72 @@ body {
 .neon-border-orange {
   filter: brightness(1.3) saturate(1.6);
 }
+
+/* VRTradingPortal styles */
+.vrPortal {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  position: relative;
+}
+.vrPortalHeader {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #fff;
+  z-index: 2;
+}
+
+/* ModularDashboard styles */
+.modularDashboard {
+  padding: 24px;
+}
+.modularDashboardTitle {
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.modularDashboardTiles {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.modularDashboardTile {
+  border: 1px solid #0ff;
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 180px;
+  background: #111;
+  color: #0ff;
+  opacity: 1;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+}
+.modularDashboardTile.inactive {
+  background: #222;
+  color: #888;
+  opacity: 0.5;
+}
+.modularDashboardTileLabel {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.modularDashboardTileButton {
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: none;
+  background: #0ff;
+  color: #000;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.modularDashboardTileButton.inactive {
+  background: #444;
+  color: #fff;
+}
+.modularDashboardTileVRLink {
+  margin-top: 12px;
+}
+.modularDashboardTileVRLink a {
+  color: #0ff;
+  text-decoration: underline;
+}

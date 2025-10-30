@@ -1,0 +1,23 @@
+.chartCanvas {
+  border: 1px solid #0ff;
+  border-radius: 12px;
+  padding: 16px;
+}
+.newsFeed {
+  border: 1px solid #0ff;
+  border-radius: 12px;
+  padding: 16px;
+}
+.newsFeedTitle {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.newsFeedList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.newsFeedItem a {
+  color: #0ff;
+  text-decoration: none;
+}

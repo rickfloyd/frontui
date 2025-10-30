@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markets - AI Quantum Trading Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #000000 0%, #1a0033 100%);
+      color: #00ffff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      overflow-x: hidden;
+      min-width: 1280px;
+    }
+
+    .container {
+      max-width: 1920px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 0;
+      border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+      margin-bottom: 2rem;
+    }
+
+    .back-btn {
+      background: rgba(255, 0, 255, 0.2);
+      border: 2px solid #ff00ff;
+      color: #ff00ff;
+      padding: 0.8rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 0, 255, 0.4);
+      transform: translateX(-5px);
+    }
+
+    h1 {
+      font-size: 3rem;
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .tab {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 0, 255, 0.3);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+    }
+
+    .tab.active {
+      background: rgba(255, 0, 255, 0.3);
+      border-color: #ff00ff;
+      color: #ff00ff;
+    }
+
+    .tab:hover {
+      border-color: #ff00ff;
+      transform: translateY(-2px);
+    }
+
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .market-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 0, 255, 0.3);
+      border-radius: 15px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .market-card:hover {
+      transform: translateY(-5px);
+      border-color: #ff1493;
+      box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3);
+    }
+
+    .symbol {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff1493;
+      margin-bottom: 0.5rem;
+    }
+
+    .name {
+      color: #888;
+      margin-bottom: 1rem;
+    }
+
+    .price {
+      font-size: 2rem;
+      color: #00ffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .change {
+      font-size: 1.2rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 5px;
+      display: inline-block;
+    }
+
+    .change.positive {
+      background: rgba(0, 255, 0, 0.2);
+      color: #0f0;
+    }
+
+    .change.negative {
+      background: rgba(255, 0, 0, 0.2);
+      color: #f00;
+    }
+
+    .content {
+      display: none;
+    }
+
+    .content.active {
+      display: block;
+    }
+
+    .status-bar {
+      background: rgba(0, 255, 0, 0.1);
+      border: 1px solid #0f0;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #0f0;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="index.html" class="back-btn">← Back to Home</a>
+      <h1>📊 MARKETS</h1>
+      <div style="width: 150px;"></div>
+    </header>
+
+    <div class="status-bar">
+      <span class="status-indicator"></span>
+      <strong>LIVE MARKET DATA</strong> • Real-Time Updates • Desktop Mode
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('stocks')">📈 Stocks</button>
+      <button class="tab" onclick="showTab('crypto')">₿ Crypto</button>
+      <button class="tab" onclick="showTab('futures')">📊 Futures</button>
+    </div>
+
+    <div id="stocks" class="content active">
+      <div class="market-grid">
+        <div class="market-card">
+          <div class="symbol">AAPL</div>
+          <div class="name">Apple Inc.</div>
+          <div class="price">$175.43</div>
+          <div class="change positive">+2.34%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">GOOGL</div>
+          <div class="name">Alphabet Inc.</div>
+          <div class="price">$142.18</div>
+          <div class="change positive">+1.87%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">MSFT</div>
+          <div class="name">Microsoft Corp.</div>
+          <div class="price">$378.91</div>
+          <div class="change positive">+3.12%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">TSLA</div>
+          <div class="name">Tesla Inc.</div>
+          <div class="price">$242.67</div>
+          <div class="change negative">-1.45%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">AMZN</div>
+          <div class="name">Amazon.com Inc.</div>
+          <div class="price">$178.35</div>
+          <div class="change positive">+2.98%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">META</div>
+          <div class="name">Meta Platforms</div>
+          <div class="price">$512.44</div>
+          <div class="change positive">+4.21%</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="crypto" class="content">
+      <div class="market-grid">
+        <div class="market-card">
+          <div class="symbol">BTC</div>
+          <div class="name">Bitcoin</div>
+          <div class="price">$67,234.56</div>
+          <div class="change positive">+5.67%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">ETH</div>
+          <div class="name">Ethereum</div>
+          <div class="price">$3,456.78</div>
+          <div class="change positive">+3.89%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">BNB</div>
+          <div class="name">Binance Coin</div>
+          <div class="price">$612.34</div>
+          <div class="change positive">+2.34%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">SOL</div>
+          <div class="name">Solana</div>
+          <div class="price">$142.89</div>
+          <div class="change negative">-1.23%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">XRP</div>
+          <div class="name">Ripple</div>
+          <div class="price">$0.5678</div>
+          <div class="change positive">+4.56%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">ADA</div>
+          <div class="name">Cardano</div>
+          <div class="price">$0.4567</div>
+          <div class="change positive">+3.21%</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="futures" class="content">
+      <div class="market-grid">
+        <div class="market-card">
+          <div class="symbol">ES</div>
+          <div class="name">E-mini S&P 500</div>
+          <div class="price">$4,567.25</div>
+          <div class="change positive">+1.34%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">NQ</div>
+          <div class="name">E-mini NASDAQ</div>
+          <div class="price">$15,678.50</div>
+          <div class="change positive">+2.12%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">YM</div>
+          <div class="name">E-mini Dow</div>
+          <div class="price">$34,567.75</div>
+          <div class="change positive">+0.98%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">CL</div>
+          <div class="name">Crude Oil</div>
+          <div class="price">$89.45</div>
+          <div class="change negative">-2.34%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">GC</div>
+          <div class="name">Gold</div>
+          <div class="price">$2,034.56</div>
+          <div class="change positive">+1.67%</div>
+        </div>
+        <div class="market-card">
+          <div class="symbol">SI</div>
+          <div class="name">Silver</div>
+          <div class="price">$24.78</div>
+          <div class="change positive">+2.89%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabName) {
+      // Hide all content
+      document.querySelectorAll('.content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Remove active from all tabs
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected content and activate tab
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+      
+      console.log(`Switched to ${tabName} market data`);
+    }
+
+    // Simulate real-time price updates
+    setInterval(() => {
+      const prices = document.querySelectorAll('.price');
+      prices.forEach(price => {
+        const currentPrice = parseFloat(price.textContent.replace(/[$,]/g, ''));
+        const change = (Math.random() - 0.5) * 2;
+        const newPrice = currentPrice + change;
+        price.textContent = '$' + newPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      });
+    }, 5000);
+
+    console.log("📊 Markets page loaded - Desktop mode");
+  </script>
+</body>
+</html>

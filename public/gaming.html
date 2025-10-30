@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QubitSensei - AI Trading Mentor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .header {
+      background: rgba(255, 0, 255, 0.1);
+      border-bottom: 2px solid #ff00ff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(255, 0, 255, 0.3);
+    }
+
+    .header h1 {
+      color: #ff00ff;
+      font-size: 2.5em;
+      text-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #ff4fd8;
+      font-size: 1.2em;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+      height: calc(100vh - 120px);
+    }
+
+    .chat-container {
+      background: rgba(26, 10, 46, 0.8);
+      border: 2px solid #ff00ff;
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 32px rgba(255, 0, 255, 0.3);
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      background: rgba(255, 0, 255, 0.2);
+      border-left: 4px solid #ff00ff;
+      margin-left: 20px;
+    }
+
+    .message.assistant {
+      background: rgba(0, 255, 255, 0.2);
+      border-left: 4px solid #00ffff;
+      margin-right: 20px;
+    }
+
+    .message-header {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #ff00ff;
+    }
+
+    .message.assistant .message-header {
+      color: #00ffff;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid #ff00ff;
+      border-radius: 10px;
+      color: white;
+      font-size: 1em;
+    }
+
+    .input-area input:focus {
+      outline: none;
+      border-color: #ff4fd8;
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+    }
+
+    .btn {
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #ff00ff, #ff4fd8);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .sidebar {
+      background: rgba(26, 10, 46, 0.8);
+      border: 2px solid #ff00ff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(255, 0, 255, 0.3);
+    }
+
+    .sidebar h2 {
+      color: #ff00ff;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .quick-btn {
+      padding: 12px;
+      background: rgba(255, 0, 255, 0.2);
+      border: 1px solid #ff00ff;
+      border-radius: 8px;
+      color: #ff4fd8;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      font-size: 0.9em;
+    }
+
+    .quick-btn:hover {
+      background: rgba(255, 0, 255, 0.4);
+      transform: translateX(5px);
+    }
+
+    .features {
+      margin-top: 20px;
+    }
+
+    .feature-item {
+      padding: 10px;
+      margin-bottom: 10px;
+      background: rgba(0, 255, 255, 0.1);
+      border-left: 3px solid #00ffff;
+      border-radius: 5px;
+    }
+
+    .feature-item h3 {
+      color: #00ffff;
+      font-size: 1em;
+      margin-bottom: 5px;
+    }
+
+    .feature-item p {
+      color: #aaa;
+      font-size: 0.85em;
+    }
+
+    .status {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: rgba(0, 255, 0, 0.2);
+      border: 2px solid #00ff00;
+      border-radius: 20px;
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: #ff00ff;
+      margin: 10px 0;
+    }
+
+    .loading.active {
+      display: block;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ff00ff, #ff4fd8);
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="status">● Backend Online</div>
+
+  <div class="header">
+    <h1>QubitSensei 🧠</h1>
+    <p>Your AI-Powered Trading Mentor - Powered by GPT-4</p>
+  </div>
+
+  <div class="container">
+    <div class="chat-container">
+      <div class="messages" id="messages">
+        <div class="message assistant">
+          <div class="message-header">QubitSensei</div>
+          <div>
+            Welcome! I'm QubitSensei, your AI trading mentor powered by GPT-4. I can help you with:
+            <br><br>
+            • Trading strategy guidance<br>
+            • Code optimization and review<br>
+            • QubitScript education<br>
+            • Pine Script to QubitScript conversion<br>
+            • Real-time debugging assistance<br>
+            <br>
+            Ask me anything about trading strategies or coding!
+          </div>
+        </div>
+      </div>
+
+      <div class="loading" id="loading">
+        ⚡ QubitSensei is thinking...
+      </div>
+
+      <div class="input-area">
+        <input 
+          type="text" 
+          id="userInput" 
+          placeholder="Ask QubitSensei anything about trading..."
+          onkeypress="if(event.key==='Enter') sendMessage()"
+        >
+        <button class="btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <h2>Quick Actions</h2>
+      <div class="quick-actions">
+        <button class="quick-btn" onclick="quickAsk('Explain EMA crossovers')">
+          📊 Explain EMA Crossovers
+        </button>
+        <button class="quick-btn" onclick="quickAsk('What is RSI and how to use it?')">
+          📈 Understanding RSI
+        </button>
+        <button class="quick-btn" onclick="quickAsk('Create a momentum strategy')">
+          🚀 Momentum Strategy
+        </button>
+        <button class="quick-btn" onclick="quickAsk('How to optimize my trading code?')">
+          ⚡ Code Optimization
+        </button>
+        <button class="quick-btn" onclick="quickAsk('Explain risk management')">
+          🛡️ Risk Management
+        </button>
+        <button class="quick-btn" onclick="quickAsk('Convert Pine Script to QubitScript')">
+          🔄 Pine → Qubit
+        </button>
+      </div>
+
+      <div class="features">
+        <h2 style="margin-bottom: 15px;">Features</h2>
+        
+        <div class="feature-item">
+          <h3>🤖 GPT-4 Powered</h3>
+          <p>Advanced AI with deep trading knowledge</p>
+        </div>
+
+        <div class="feature-item">
+          <h3>📚 Context Aware</h3>
+          <p>Remembers conversation history</p>
+        </div>
+
+        <div class="feature-item">
+          <h3>🔒 Secure</h3>
+          <p>QuantumGuardian protection</p>
+        </div>
+
+        <div class="feature-item">
+          <h3>⚡ Real-time</h3>
+          <p>Instant responses and guidance</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let userId = 'investor-demo-' + Date.now();
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const message = input.value.trim();
+      
+      if (!message) return;
+
+      // Add user message
+      addMessage('user', message);
+      input.value = '';
+
+      // Show loading
+      document.getElementById('loading').classList.add('active');
+
+      try {
+        const response = await fetch('http://localhost:5000/api/sensei', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: userId,
+            prompt: message,
+            context: { expertiseLevel: 'intermediate' }
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          addMessage('assistant', data.message);
+        } else {
+          addMessage('assistant', '❌ Error: ' + (data.error || 'Failed to get response'));
+        }
+      } catch (error) {
+        addMessage('assistant', '❌ Connection error. Make sure backend is running on port 5000.');
+        console.error('Error:', error);
+      } finally {
+        document.getElementById('loading').classList.remove('active');
+      }
+    }
+
+    function quickAsk(question) {
+      document.getElementById('userInput').value = question;
+      sendMessage();
+    }
+
+    function addMessage(type, content) {
+      const messagesDiv = document.getElementById('messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${type}`;
+      
+      const header = document.createElement('div');
+      header.className = 'message-header';
+      header.textContent = type === 'user' ? 'You' : 'QubitSensei';
+      
+      const body = document.createElement('div');
+      body.textContent = content;
+      
+      messageDiv.appendChild(header);
+      messageDiv.appendChild(body);
+      messagesDiv.appendChild(messageDiv);
+      
+      // Scroll to bottom
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Check backend status
+    async function checkBackendStatus() {
+      try {
+        const response = await fetch('http://localhost:5000/api/health');
+        const data = await response.json();
+        
+        if (data.status === 'ok') {
+          document.querySelector('.status').innerHTML = '● Backend Online';
+          document.querySelector('.status').style.borderColor = '#00ff00';
+          document.querySelector('.status').style.background = 'rgba(0, 255, 0, 0.2)';
+        }
+      } catch (error) {
+        document.querySelector('.status').innerHTML = '● Backend Offline';
+        document.querySelector('.status').style.borderColor = '#ff0000';
+        document.querySelector('.status').style.background = 'rgba(255, 0, 0, 0.2)';
+      }
+    }
+
+    // Check status on load and every 10 seconds
+    checkBackendStatus();
+    setInterval(checkBackendStatus, 10000);
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Webhooks Dashboard - Xbox, PlayStation, Steam, NVIDIA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #18181b 0%, #27272a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(36, 37, 38, 0.97);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #232326 0%, #18181b 100%);
+            color: #fafafa;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #fafafa;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #a1a1aa;
+            font-size: 1.1em;
+        }
+
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .platform-card {
+            background: #232326;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .platform-card.steam {
+            border-left: 5px solid #1b2838;
+        }
+
+        .platform-card.xbox {
+            border-left: 5px solid #107c10;
+        }
+
+        .platform-card.playstation {
+            border-left: 5px solid #003087;
+        }
+
+        .platform-card.nvidia {
+            border-left: 5px solid #76b900;
+        }
+
+        .platform-card.discord {
+            border-left: 5px solid #5865F2;
+        }
+
+        .platform-card.twitch {
+            border-left: 5px solid #9146FF;
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .platform-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .platform-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #fafafa;
+        }
+
+        .platform-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .status-active {
+            background: #38bdf8;
+            color: #18181b;
+        }
+
+        .status-inactive {
+            background: #27272a;
+            color: #a1a1aa;
+        }
+
+        .platform-info {
+            color: #a1a1aa;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .platform-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: #4299e1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3182ce;
+        }
+
+        .btn-secondary {
+            background: #ed8936;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #dd6b20;
+        }
+
+        .webhook-setup {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .webhook-setup h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .setup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .setup-item {
+            background: #18181b;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #38bdf8;
+        }
+
+        .setup-item h3 {
+            color: #fafafa;
+            margin-bottom: 10px;
+        }
+
+        .setup-item p {
+            color: #a1a1aa;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .setup-item ol {
+            color: #d4d4d8;
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .data-display {
+            background: rgba(36, 37, 38, 0.97);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .data-display h2 {
+            color: #fafafa;
+            margin-bottom: 20px;
+        }
+
+        .data-content {
+            background: #18181b;
+            color: #fafafa;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #232326;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #a1a1aa;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4299e1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .achievement-feed {
+            background: rgba(36, 37, 38, 0.97);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .achievement-item {
+            background: #232326;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            border-left: 4px solid #38bdf8;
+        }
+
+        .achievement-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .achievement-info h4 {
+            color: #fafafa;
+            margin-bottom: 5px;
+        }
+
+        .achievement-info p {
+            color: #a1a1aa;
+            font-size: 0.9em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #a1a1aa;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #27272a;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #38bdf8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .platforms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .setup-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-button" onclick="window.location.href='dashboard.html'">
+                ← Back to Dashboard
+            </button>
+            <h1>🎮 Gaming Webhooks Dashboard</h1>
+            <p>Xbox • PlayStation • Steam • NVIDIA GeForce • Discord • Twitch</p>
+        </div>
+
+        <!-- Gaming Platforms -->
+        <div class="platforms-grid">
+            <!-- Steam -->
+            <div class="platform-card steam">
+                <div class="platform-header">
+                    <span class="platform-icon">🎮</span>
+                    <span class="platform-name">Steam</span>
+                    <span class="platform-status status-active">Active</span>
+                </div>
+                <div class="platform-info">
+                    Full API support with player stats, achievements, games library, and friends list.
+                </div>
+                <div class="platform-actions">
+                    <button class="btn btn-primary" onclick="testSteam()">Test API</button>
+                    <button class="btn btn-secondary" onclick="showSteamSetup()">Setup</button>
+                </div>
+            </div>
+
+            <!-- Xbox Live -->
+            <div class="platform-card xbox">
+                <div class="platform-header">
+                    <span class="platform-icon">🎯</span>
+                    <span class="platform-name">Xbox Live</span>
+                    <span class="platform-status status-inactive">Requires API Key</span>
+                </div>
+                <div class="platform-info">
+                    Profile, achievements, and game stats via OpenXBL third-party API.
+                </div>
+                <div class="platform-actions">
+                    <button class="btn btn-primary" onclick="testXbox()">Test API</button>
+                    <button class="btn btn-secondary" onclick="showXboxSetup()">Setup</button>
+                </div>
+            </div>
+
+            <!-- PlayStation Network -->
+            <div class="platform-card playstation">
+                <div class="platform-header">
+                    <span class="platform-icon">🎮</span>
+                    <span class="platform-name">PlayStation</span>
+                    <span class="platform-status status-inactive">Unofficial</span>
+                </div>
+                <div class="platform-info">
+                    Profile and trophies via unofficial third-party APIs (PSNProfiles, TrueTrophies).
+                </div>
+                <div class="platform-actions">
+                    <button class="btn btn-primary" onclick="testPlayStation()">Test API</button>
+                    <button class="btn btn-secondary" onclick="showPSNSetup()">Setup</button>
+                </div>
+            </div>
+
+            <!-- NVIDIA GeForce -->
+            <div class="platform-card nvidia">
+                <div class="platform-header">
+                    <span class="platform-icon">⚡</span>
+                    <span class="platform-name">NVIDIA GeForce</span>
+                    <span class="platform-status status-inactive">No API</span>
+                </div>
+                <div class="platform-info">
+                    No official public API. Requires web scraping or custom integration.
+                </div>
+                <div class="platform-actions">
+                    <button class="btn btn-primary" onclick="testNvidia()">Test</button>
+                    <button class="btn btn-secondary" onclick="showNvidiaInfo()">Info</button>
+                </div>
+            </div>
+
+            <!-- Discord -->
+            <div class="platform-card discord">
+                <div class="platform-header">
+                    <span class="platform-icon">💬</span>
+                    <span class="platform-name">Discord</span>
+                    <span class="platform-status status-active">Webhooks</span>
+                </div>
+                <div class="platform-info">
+                    Send gaming events, achievements, and notifications via Discord webhooks.
+                </div>
+                <div class="platform-actions">
+                    <button class="btn btn-primary" onclick="testDiscord()">Send Test</button>
+                    <button class="btn btn-secondary" onclick="showDiscordSetup()">Setup</button>
+                </div>
+            </div>
+
+            <!-- Twitch -->
+            <div class="platform-card twitch">
+                <div class="platform-header">
+                    <span class="platform-icon">📺</span>
+                    <span class="platform-name">Twitch</span>
+                    <span class="platform-status status-active">EventSub</span>
+                </div>
+                <div class="platform-info">
+                    Stream notifications, user info, and live gaming content via Twitch API.
+                </div>
+                <div class="platform-actions">
+                    <button class="btn btn-primary" onclick="testTwitch()">Test API</button>
+                    <button class="btn btn-secondary" onclick="showTwitchSetup()">Setup</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- User IDs Configuration -->
+        <div class="webhook-setup">
+            <h2>⚙️ Configure Your Gaming IDs</h2>
+            <div class="setup-grid">
+                <div class="input-group">
+                    <label>Steam ID (64-bit)</label>
+                    <input type="text" id="steamId" placeholder="76561198000000000">
+                </div>
+                <div class="input-group">
+                    <label>Xbox Gamertag</label>
+                    <input type="text" id="gamertag" placeholder="YourGamertag">
+                </div>
+                <div class="input-group">
+                    <label>PlayStation Network ID</label>
+                    <input type="text" id="psnId" placeholder="YourPSNID">
+                </div>
+                <div class="input-group">
+                    <label>Twitch Username</label>
+                    <input type="text" id="twitchUsername" placeholder="YourTwitchName">
+                </div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="loadDashboard()">
+                🎮 Load Gaming Dashboard
+            </button>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="webhook-setup">
+            <h2>📊 Gaming Stats Summary</h2>
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalGames">0</div>
+                    <div class="stat-label">Total Games</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalAchievements">0</div>
+                    <div class="stat-label">Achievements</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activePlatforms">0</div>
+                    <div class="stat-label">Active Platforms</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalPlaytime">0h</div>
+                    <div class="stat-label">Total Playtime</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Response Display -->
+        <div class="data-display">
+            <h2>📡 API Response</h2>
+            <div class="data-content" id="apiResponse">
+                Click any "Test API" button above to see live data from gaming platforms...
+            </div>
+        </div>
+
+        <!-- Recent Achievements Feed -->
+        <div class="achievement-feed">
+            <h2>🏆 Recent Achievements</h2>
+            <div id="achievementFeed">
+                <p style="color: #718096; text-align: center;">
+                    Load your gaming dashboard to see recent achievements...
+                </p>
+            </div>
+        </div>
+
+        <!-- Webhook Setup Guide -->
+        <div class="webhook-setup">
+            <h2>📚 Webhook Setup Guide</h2>
+            <div class="setup-grid">
+                <div class="setup-item">
+                    <h3>🎮 Steam API</h3>
+                    <p><strong>Method:</strong> REST API (Polling)</p>
+                    <ol>
+                        <li>Get API key from <a href="https://steamcommunity.com/dev/apikey" target="_blank">steamcommunity.com/dev</a></li>
+                        <li>Set STEAM_API_KEY environment variable</li>
+                        <li>Poll API endpoints at regular intervals</li>
+                        <li>Available data: profile, games, achievements</li>
+                    </ol>
+                </div>
+
+                <div class="setup-item">
+                    <h3>🎯 Xbox Live (OpenXBL)</h3>
+                    <p><strong>Method:</strong> Third-party API</p>
+                    <ol>
+                        <li>Sign up at <a href="https://xbl.io" target="_blank">xbl.io</a></li>
+                        <li>Get API key from dashboard</li>
+                        <li>Set XBOX_API_KEY environment variable</li>
+                        <li>Available data: profile, achievements, friends</li>
+                    </ol>
+                </div>
+
+                <div class="setup-item">
+                    <h3>🎮 PlayStation Network</h3>
+                    <p><strong>Method:</strong> Unofficial APIs</p>
+                    <ol>
+                        <li>No official public API available</li>
+                        <li>Use PSNProfiles.com API (unofficial)</li>
+                        <li>Or use TrueTrophies API</li>
+                        <li>Alternative: Web scraping</li>
+                    </ol>
+                </div>
+
+                <div class="setup-item">
+                    <h3>💬 Discord Webhooks</h3>
+                    <p><strong>Method:</strong> Incoming Webhooks</p>
+                    <ol>
+                        <li>Go to Server Settings → Integrations</li>
+                        <li>Create new webhook</li>
+                        <li>Copy webhook URL</li>
+                        <li>Set DISCORD_WEBHOOK_URL environment variable</li>
+                    </ol>
+                </div>
+
+                <div class="setup-item">
+                    <h3>📺 Twitch EventSub</h3>
+                    <p><strong>Method:</strong> Webhooks + API</p>
+                    <ol>
+                        <li>Register app at <a href="https://dev.twitch.tv" target="_blank">dev.twitch.tv</a></li>
+                        <li>Get Client ID and Client Secret</li>
+                        <li>Set TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET</li>
+                        <li>Subscribe to EventSub topics</li>
+                    </ol>
+                </div>
+
+                <div class="setup-item">
+                    <h3>⚡ NVIDIA GeForce</h3>
+                    <p><strong>Method:</strong> Not Available</p>
+                    <ol>
+                        <li>No public API available</li>
+                        <li>NVIDIA does not provide GeForce Now API</li>
+                        <li>Consider web scraping (against TOS)</li>
+                        <li>Monitor NVIDIA developer site for updates</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:4000/api/gaming';
+
+        // Test Steam API
+        async function testSteam() {
+            const steamId = document.getElementById('steamId').value || '76561198000000000';
+            showLoading();
+            
+            try {
+                const response = await fetch(`${API_BASE}/steam/player/${steamId}`);
+                const data = await response.json();
+                displayResponse(data);
+            } catch (error) {
+                displayError('Steam API Error: ' + error.message);
+            }
+        }
+
+        // Test Xbox API
+        async function testXbox() {
+            const gamertag = document.getElementById('gamertag').value;
+            if (!gamertag) {
+                alert('Please enter your Xbox Gamertag');
+                return;
+            }
+            
+            showLoading();
+            try {
+                const response = await fetch(`${API_BASE}/xbox/profile/${gamertag}`);
+                const data = await response.json();
+                displayResponse(data);
+            } catch (error) {
+                displayError('Xbox API Error: ' + error.message);
+            }
+        }
+
+        // Test PlayStation API
+        async function testPlayStation() {
+            const psnId = document.getElementById('psnId').value;
+            if (!psnId) {
+                alert('Please enter your PSN ID');
+                return;
+            }
+            
+            showLoading();
+            displayResponse({
+                success: false,
+                platform: 'playstation',
+                message: 'PlayStation does not provide official public API',
+                note: 'Use PSNProfiles.com or TrueTrophies API for unofficial access'
+            });
+        }
+
+        // Test NVIDIA
+        function testNvidia() {
+            displayResponse({
+                success: false,
+                platform: 'nvidia',
+                message: 'NVIDIA GeForce Now does not provide public API',
+                note: 'No official API available. Web scraping may be against TOS.'
+            });
+        }
+
+        // Test Discord Webhook
+        async function testDiscord() {
+            showLoading();
+            try {
+                const response = await fetch(`${API_BASE}/discord/test`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                displayResponse(data);
+            } catch (error) {
+                displayError('Discord Webhook Error: ' + error.message);
+            }
+        }
+
+        // Test Twitch API
+        async function testTwitch() {
+            const username = document.getElementById('twitchUsername').value || 'shroud';
+            showLoading();
+            
+            try {
+                const response = await fetch(`${API_BASE}/twitch/user/${username}`);
+                const data = await response.json();
+                displayResponse(data);
+            } catch (error) {
+                displayError('Twitch API Error: ' + error.message);
+            }
+        }
+
+        // Load Full Dashboard
+        async function loadDashboard() {
+            const userIds = {
+                steamId: document.getElementById('steamId').value,
+                gamertag: document.getElementById('gamertag').value,
+                psnId: document.getElementById('psnId').value,
+                twitchUsername: document.getElementById('twitchUsername').value
+            };
+
+            showLoading();
+            try {
+                const response = await fetch(`${API_BASE}/dashboard`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userIds)
+                });
+                const data = await response.json();
+                displayResponse(data);
+                updateStats(data.summary);
+            } catch (error) {
+                displayError('Dashboard Error: ' + error.message);
+            }
+        }
+
+        // Display API response
+        function displayResponse(data) {
+            const responseDiv = document.getElementById('apiResponse');
+            responseDiv.textContent = JSON.stringify(data, null, 2);
+        }
+
+        // Display error
+        function displayError(message) {
+            const responseDiv = document.getElementById('apiResponse');
+            responseDiv.textContent = `ERROR: ${message}`;
+        }
+
+        // Show loading indicator
+        function showLoading() {
+            const responseDiv = document.getElementById('apiResponse');
+            responseDiv.innerHTML = '<div class="loading"></div> Loading...';
+        }
+
+        // Update stats
+        function updateStats(summary) {
+            document.getElementById('totalGames').textContent = summary.totalGames || 0;
+            document.getElementById('totalAchievements').textContent = summary.totalAchievements || 0;
+            document.getElementById('activePlatforms').textContent = summary.activePlatforms || 0;
+            document.getElementById('totalPlaytime').textContent = (summary.totalPlaytime || 0) + 'h';
+        }
+
+        // Setup modals
+        function showSteamSetup() {
+            alert('Steam Setup:\n\n1. Get API key from https://steamcommunity.com/dev/apikey\n2. Set STEAM_API_KEY environment variable\n3. Enter your Steam ID (64-bit) above\n4. Click "Test API"');
+        }
+
+        function showXboxSetup() {
+            alert('Xbox Setup:\n\n1. Sign up at https://xbl.io\n2. Get API key from dashboard\n3. Set XBOX_API_KEY environment variable\n4. Enter your Gamertag above\n5. Click "Test API"');
+        }
+
+        function showPSNSetup() {
+            alert('PlayStation Setup:\n\nNote: No official API available.\n\nOptions:\n1. PSNProfiles.com API (unofficial)\n2. TrueTrophies API (unofficial)\n3. Web scraping (may violate TOS)\n\nRecommendation: Use third-party tracking sites that provide APIs.');
+        }
+
+        function showNvidiaInfo() {
+            alert('NVIDIA GeForce Now:\n\nNo public API available.\n\nNVIDIA does not provide API access for GeForce Now.\n\nAlternatives:\n- Web scraping (may violate TOS)\n- Monitor NVIDIA developer portal for future API releases\n- Use Steam/Epic/other platform APIs instead');
+        }
+
+        function showDiscordSetup() {
+            alert('Discord Webhook Setup:\n\n1. Go to your Discord Server Settings\n2. Click "Integrations"\n3. Click "Create Webhook"\n4. Copy the webhook URL\n5. Set DISCORD_WEBHOOK_URL environment variable\n6. Click "Send Test" to verify');
+        }
+
+        function showTwitchSetup() {
+            alert('Twitch Setup:\n\n1. Go to https://dev.twitch.tv/console/apps\n2. Register a new application\n3. Get Client ID and Client Secret\n4. Set TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET\n5. Enter Twitch username above\n6. Click "Test API"');
+        }
+
+        // Auto-load on page load
+        window.onload = function() {
+            console.log('Gaming Webhooks Dashboard loaded');
+        };
+    </script>
+</body>
+</html>
