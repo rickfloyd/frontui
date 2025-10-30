@@ -1,0 +1,90 @@
+{
+  "Republican": {
+    "news": "https://newsdata.io/api/1/news?apikey=pub_7720545ede49aae44760ca989d86f285fb19a&q=republican",
+    "youtube": "https://www.googleapis.com/youtube/v3/search?part=snippet&q=republican+politics&type=video&maxResults=5&key=YOUR_YOUTUBE_API_KEY",
+    "reddit": "https://www.reddit.com/r/Conservative/top.json?limit=5",
+    "categories": [
+      "Economy and Inflation",
+      "National Security",
+      "Education and Schools",
+      "Healthcare and Insurance",
+      "Energy and Environment",
+      "Immigration and Border",
+      "Crime and Justice",
+      "Technology and AI",
+      "Foreign Policy",
+      "Elections and Voting",
+      "Taxes and Spending",
+      "Civil Rights and Equality",
+      "Veterans and Military",
+      "Labor and Jobs",
+      "Housing and Infrastructure"
+    ]
+  },
+  "Democrat": {
+    "news": "https://newsdata.io/api/1/news?apikey=pub_7720545ede49aae44760ca989d86f285fb19a&q=democratic",
+    "youtube": "https://www.googleapis.com/youtube/v3/search?part=snippet&q=democratic+politics&type=video&maxResults=5&key=YOUR_YOUTUBE_API_KEY",
+    "reddit": "https://www.reddit.com/r/Democrats/top.json?limit=5",
+    "categories": [
+        "Economy and Inflation",
+      "National Security",
+      "Education and Schools",
+      "Healthcare and Insurance",
+      "Energy and Environment",
+      "Immigration and Border",
+      "Crime and Justice",
+      "Technology and AI",
+      "Foreign Policy",
+      "Elections and Voting",
+      "Taxes and Spending",
+      "Civil Rights and Equality",
+      "Veterans and Military",
+      "Labor and Jobs",
+      "Housing and Infrastructure"
+    ]
+  },
+  "Liberal": {
+    "news": "https://newsdata.io/api/1/news?apikey=pub_7720545ede49aae44760ca989d86f285fb19a&q=libral",
+    "youtube": "https://www.googleapis.com/youtube/v3/search?part=snippet&q=liberal+politics&type=video&maxResults=5&key=YOUR_YOUTUBE_API_KEY",
+    "reddit": "https://www.reddit.com/r/liberal/top.json?limit=5",
+    "categories": [
+        "Economy and Inflation",
+      "National Security",
+      "Education and Schools",
+      "Healthcare and Insurance",
+      "Energy and Environment",
+      "Immigration and Border",
+      "Crime and Justice",
+      "Technology and AI",
+      "Foreign Policy",
+      "Elections and Voting",
+      "Taxes and Spending",
+      "Civil Rights and Equality",
+      "Veterans and Military",
+      "Labor and Jobs",
+      "Housing and Infrastructure"
+    ]
+  },
+  "Independent": {
+    "news": "https://newsdata.io/api/1/news?apikey=pub_7720545ede49aae44760ca989d86f285fb19a&q=independant%20",
+    "youtube": "https://www.googleapis.com/youtube/v3/search?part=snippet&q=independent+politics&type=video&maxResults=5&key=YOUR_YOUTUBE_API_KEY",
+    "reddit": "https://www.reddit.com/r/Independent/top.json?limit=5",
+    "categories": [
+        "Economy and Inflation",
+      "National Security",
+      "Education and Schools",
+      "Healthcare and Insurance",
+      "Energy and Environment",
+      "Immigration and Border",
+      "Crime and Justice",
+      "Technology and AI",
+      "Foreign Policy",
+      "Elections and Voting",
+      "Taxes and Spending",
+      "Civil Rights and Equality",
+      "Veterans and Military",
+      "Labor and Jobs",
+      "Housing and Infrastructure"
+    ]
+  }
+}

@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
-import NeonTheme from './components/NeonTheme';
-import MinimalTheme from './components/MinimalTheme';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import NeonTheme from "./components/NeonTheme";
+import SimpleView from "./components/SimpleView";
+import CustomView from "./components/CustomView";
+import Personalities from './pages/Personalities';
 
 function App() {
-  const [theme, setTheme] = useState('Neon');
-
-  const switchTheme = () => {
-    setTheme(theme === 'Neon' ? 'Minimal' : 'Neon');
-  };
+  const theme = window.localStorage.getItem("siteTheme") || "neon";
 
   return (
-    <div>
-      {theme === 'Neon' ? (
-        <NeonTheme switchTheme={switchTheme} />
-      ) : (
-        <MinimalTheme switchTheme={switchTheme} />
-      )}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={theme === 'simple' ? <SimpleView /> : theme === 'custom' ? <CustomView /> : <NeonTheme />} />
+        <Route path="/personalities" element={<Personalities />} />
+      </Routes>
+    </Router>
   );
 }
 
