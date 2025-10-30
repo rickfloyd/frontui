@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SimpleTabs from "./SimpleTabs";
 import AnimatedLogo from "./AnimatedLogo";
 
-const MinimalTheme: React.FC = () => {
+const MinimalTheme: React.FC<{ switchTheme: () => void }> = ({ switchTheme }) => {
   const [activeTab, setActiveTab] = useState("forex");
 
   const tabs = [
@@ -24,11 +24,7 @@ const MinimalTheme: React.FC = () => {
           </span>
         </div>
         <button
-          onClick={() => {
-            const next = 'neon';
-            window.localStorage.setItem('siteTheme', next);
-            window.location.reload();
-          }}
+          onClick={switchTheme}
           className="mt-8 mb-2 px-4 py-2 rounded-lg font-bold text-xs bg-gray-900 text-pink-400 border border-pink-500 shadow-neon-pink hover:bg-pink-900 hover:text-white transition-all"
           aria-label="Switch to Neon Theme"
         >
